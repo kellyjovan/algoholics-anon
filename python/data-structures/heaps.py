@@ -58,8 +58,9 @@ def heappush(value, heap):
 
 
 
-# a = [10, 20, 15, 12, 40, 25, 18]
-# heapify_min(a)
+a = [10, 20, 15, 12, 40, 25, 18]
+heapify_min(a)
+print(a)
 # print(heappop(a))
 # print(a)
 # heappush(10, a)
