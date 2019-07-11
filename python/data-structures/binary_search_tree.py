@@ -1,43 +1,70 @@
 from queue import SimpleQueue
 
 class BST:
-    def __init__(self, val):
-        self.val = val
+    def __init__(self, key):
+        self.key = key
         self.left = None
         self.right = None
 
-    def add(self, val):
+    def insert(self, key):
         curr = self
-        newNode = BST(val)
+        newNode = BST(key)
 
         while True:
-            if val == curr.val:
+            if key == curr.key:
                 return
 
-            if val < curr.val:
+            if key < curr.key:
                 if curr.left:
                     curr = curr.left
                 else:
                     curr.left = newNode
                     break
-            elif val > curr.val:
+            elif key > curr.key:
                 if curr.right:
                     curr = curr.right
                 else:
                     curr.right = newNode
                     break
 
+    def is_leaf(self):
+        return not self.left and not self.right
+
+    def delete(self, key):
+        if self.key == key:
+            if self.is_leaf():
+                return None
+            
+            if self.left == None:
+                return self.right
+
+            if self.right == None:
+                return self.left
+
+            smallest = self.right.min()
+            self.key = smallest.key
+            self.right = self.right.delete(smallest.key)
+            return self
+
+        if key < self.key and self.left:
+            self.left = self.left.delete(key)
+            return self
+        
+        if key > self.key and self.right:
+            self.right = self.right.delete(key) 
+            return self
+
     def inorder(self, cb = print):
         if self.left:
             self.left.inorder(cb)
         
-        cb(self.val)
+        cb(self.key)
 
         if self.right:
             self.right.inorder(cb)
 
     def preorder(self, cb = print):
-        cb(self.val)
+        cb(self.key)
 
         if self.left:
             self.left.preorder(cb)
@@ -52,7 +79,7 @@ class BST:
         if self.right:
             self.right.postorder(cb)
 
-        cb(self.val)
+        cb(self.key)
 
     def breath_first(self, cb = print):
         queue = SimpleQueue()
@@ -60,7 +87,7 @@ class BST:
 
         while not queue.empty():
             first = queue.get()
-            cb(first.val)
+            cb(first.key)
 
             if first.left:
                 queue.put(first.left)
@@ -75,37 +102,37 @@ class BST:
         return 1 + max(left_height, right_height)
 
     def min(self):
-        if self.left == None:
-            print(self.val)
+        if not self.left:
+            return self
         else:
-            self.left.min()
+            return self.left.min()
 
     def max(self):
         if self.right == None:
-            print(self.val)
+            return self
         else:
             self.right.max()
 
-    def contains(self, val):
-        if self.val == val:
+    def contains(self, key):
+        if self.key == key:
             return True
-        elif val < self.val:
-            return False if not self.left else self.left.contains(val)
-        elif val > self.val:
-            return False if not self.right else self.right.contains(val)
+        elif key < self.key:
+            return False if not self.left else self.left.contains(key)
+        elif key > self.key:
+            return False if not self.right else self.right.contains(key)
 
 root = BST(10)
-root.add(5)
-root.add(15)
-root.add(3)
-root.add(1)
-root.add(2)
-root.add(18)
-root.add(21)
+root.insert(5)
+root.insert(15)
+root.insert(3)
+root.insert(1)
+root.insert(2)
+root.insert(18)
+root.insert(21)
 
 root2 = BST(15)
-root2.add(10)
-root2.add(20) 
+root2.insert(10)
+root2.insert(20) 
 
 print('--- In Order ---')
 root.inorder()
@@ -114,7 +141,7 @@ root.preorder()
 print('--- Post Order ----')
 root.postorder()
 print('--- Breath First ----')
-root.breath_first(lambda val: print('hah ahah {}'.format(val)))
+root.breath_first(lambda key: print('hah ahah {}'.format(key)))
 print('--- Min ---')
 root.min()
 print('--- Max --- ')
@@ -126,3 +153,10 @@ print(root.contains(99))
 print('--- Height ----')
 print(root.height())
 print(root2.height())
+
+root.delete(10)
+root.delete(15)
+root.delete(18)
+root.delete(23)
+print('---')
+root.inorder()
