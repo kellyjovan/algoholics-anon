@@ -25,7 +25,7 @@ def merge(arr_1, arr_2):
 
     output.extend(arr_1[i:])
     output.extend(arr_2[j:])
-    
+
     return output
 
 
@@ -33,6 +33,3 @@ arr1 = [1, 5, 7, 8, 10]
 arr2 = [2, 3, 4, 9, 11, 15]
 
 print(merge_sort([1, 4, 2, 5, 3, 3, 9, 11, 6]))
-
-
-# print(merge(arr1, arr2))
